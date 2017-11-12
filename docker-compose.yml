@@ -1,0 +1,30 @@
+nginx:
+  image: nginx
+  ports:
+    - "80:80"
+    - "443:443"
+  volumes:
+    - ./etc/nginx/nginx.conf:/etc/nginx/nginx.conf
+    - ./web:/etc/nginx/html
+    - ./etc/certs:/etc/nginx/ssl
+  links:
+    - php56
+
+php56:
+  build: .
+  dockerfile: /etc/docker/dockerfile_php_56
+  volumes:
+    - ./etc/php:/usr/local/etc/php
+    - ./web:/var/www/html
+    - ./web:/etc/nginx/html
+  environment:
+    - MYSQL_ROOT_PASSWORD=MY_PASSWORD
+    - MYSQL_DATABASE=YOUR_DATABASE_NAME
+    - RDS_USER=${RDS_USER}
+    - RDS_DATABASE=${RDS_DATABASE}
+    - RDS_PASSWORD=${RDS_PASSWORD}
+    - RDS_HOST=${RDS_HOST}
+    - ENVIRONMENT=${ENVIRONMENT}
+    - remote_host=10.254.254.254
+
+
